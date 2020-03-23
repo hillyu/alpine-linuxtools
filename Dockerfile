@@ -1,7 +1,7 @@
 ARG base="hillyu/notebook:latest" 
 FROM ${base}
 ARG USE_MIRROR
-ARG alpine_packages="build-base vim htop zsh git curl bash openssh"
+ARG alpine_packages="build-base vim htop zsh git curl bash openssh tmux"
 #ARG alpine_packages
 #ARG alpine_deps
 ARG python_packages="ranger"
