@@ -1,8 +1,9 @@
 ARG base="hillyu/notebook:latest" 
 FROM ${base}
 ARG USE_MIRROR
-ARG alpine_packages="build-base vim htop zsh"
-ARG alpine_deps
+ARG alpine_packages="build-base vim htop zsh git"
+#ARG alpine_packages
+#ARG alpine_deps
 ARG python_packages="ranger"
 
 RUN echo "|--> Updating" \
@@ -18,12 +19,12 @@ RUN echo "|--> Install Alpine-supported packages (from edge repo)" \
         ${alpine_deps}\
     && echo "|--> Install Python packages"; 
 RUN pip install -U --no-cache-dir ${python_packages} \
-        $([ "$USE_MIRROR" = "true" ] && echo "-i https://pypi.douban.com/simple" ||:)\
+        $([ "$USE_MIRROR" = "true" ] && echo "-i https://pypi.douban.com/simple" ||:) \
     && echo "|--> Cleaning" \
     && rm -rf /root/.cache \
     && rm -rf /root/.[acpw]* \
     && rm -rf /var/cache/apk/* \
-    && find /usr/lib/ -name __pycache__ | xargs rm -r \
+    && find /usr/lib/ -name __pycache__ | xargs rm -rf \
     && apk del .build-deps \
     && echo "|--> Done!"
 
