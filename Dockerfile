@@ -1,8 +1,8 @@
 ARG base="hillyu/notebook:latest" 
 FROM ${base}
 ARG USE_MIRROR
-ARG alpine_packages="vim htop zsh"
-ARG alpine_deps="make automake g++ "
+ARG alpine_packages="build-base vim htop zsh"
+ARG alpine_deps
 ARG python_packages="ranger"
 
 RUN echo "|--> Updating" \
@@ -13,7 +13,6 @@ RUN [ "$USE_MIRROR" = "true" ] && sed -i 's/dl-cdn.alpinelinux.org/mirrors.tuna.
 RUN echo "|--> Install Alpine-supported packages (from edge repo)" \
     && apk update && apk upgrade \
     && apk add --no-cache ${alpine_packages}\
-    && ln -s locale.h /usr/include/xlocale.h \
     && echo "|--> Install build dependencies(to-be-removed later)" \
     && apk add --no-cache --virtual=.build-deps \
         ${alpine_deps}\
@@ -21,7 +20,6 @@ RUN echo "|--> Install Alpine-supported packages (from edge repo)" \
 RUN pip install -U --no-cache-dir ${python_packages} \
         $([ "$USE_MIRROR" = "true" ] && echo "-i https://pypi.douban.com/simple" ||:)\
     && echo "|--> Cleaning" \
-    && rm /usr/include/xlocale.h \
     && rm -rf /root/.cache \
     && rm -rf /root/.[acpw]* \
     && rm -rf /var/cache/apk/* \
