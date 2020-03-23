@@ -1,10 +1,11 @@
 ARG base="hillyu/notebook:latest" 
 FROM ${base}
 ARG USE_MIRROR
-ARG alpine_packages="build-base vim htop zsh git"
+ARG alpine_packages="build-base vim htop zsh git curl bash openssh"
 #ARG alpine_packages
 #ARG alpine_deps
 ARG python_packages="ranger"
+ENV HOME="/home/hill"
 
 RUN echo "|--> Updating" \
     && echo http://dl-cdn.alpinelinux.org/alpine/edge/main | tee /etc/apk/repositories \
@@ -28,9 +29,9 @@ RUN pip install -U --no-cache-dir ${python_packages} \
     && apk del .build-deps \
     && echo "|--> Done!"
 
-RUN mkdir /home/hill && export HOME=/home/hill
+RUN mkdir /home/hill
 WORKDIR /home/hill 
 RUN git clone --recursive https://github.com/hillyu/hill.git dotfiles \
-    && dotfiles/bin/bootstrap.sh
+    && bash ~/dotfiles/bin/bootstrap.sh ~/dotfiles
 #CMD ["jupyter", "notebook", "--port=5000", "--no-browser", \
     #"--allow-root", "--ip=0.0.0.0", "--NotebookApp.token="]
