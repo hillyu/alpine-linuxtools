@@ -1,4 +1,4 @@
-ARG base="hillyu/notebook:latest" 
+ARG base="python:3-alpine" 
 FROM ${base}
 ARG USE_MIRROR
 ARG alpine_packages="build-base vim htop zsh git curl bash openssh tmux docker zsh-vcs"
