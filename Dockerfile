@@ -1,7 +1,7 @@
 ARG base="hillyu/notebook:latest" 
 FROM ${base}
 ARG USE_MIRROR
-ARG alpine_packages="build-base vim htop zsh git curl bash openssh tmux"
+ARG alpine_packages="build-base vim htop zsh git curl bash openssh tmux docker zsh-vcs"
 #ARG alpine_packages
 #ARG alpine_deps
 ARG python_packages="ranger"
@@ -33,5 +33,9 @@ RUN mkdir /home/hill
 WORKDIR /home/hill 
 RUN git clone --recursive https://github.com/hillyu/hill.git dotfiles \
     && bash ~/dotfiles/bin/bootstrap.sh ~/dotfiles
+RUN sed -i 's/ash/zsh/g' /etc/passwd
+#RUN vim +'PlugInstall --sync' +qa >/dev/null 2>/dev/null &
 #CMD ["jupyter", "notebook", "--port=5000", "--no-browser", \
     #"--allow-root", "--ip=0.0.0.0", "--NotebookApp.token="]
+ADD ./entrypoint.sh ./
+ENTRYPOINT ["/home/hill/entrypoint.sh"]
