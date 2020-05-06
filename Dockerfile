@@ -7,8 +7,9 @@ ARG distro_pkg
 #alpine
 ARG alpine_pkg="build-base vim htop zsh git curl bash openssh tmux docker zsh-vcs"  
 #buster
-arg debian_pkg="build-essential vim htop zsh git curl bash openssh tmux nvidia-container-toolkit docker-ce"
-arg distro_deps
+arg debian_pkg="build-essential vim htop zsh git curl bash tmux nvidia-container-toolkit docker-ce"
+#arg distro_deps="make automake g++ linux-headers cmake"
+arg distro_deps="make automake g++ linux-headers"
 arg port_to_expose=8080
 
 
@@ -30,10 +31,15 @@ run echo "|--> install basics pre-requisites" \
         distro_pkg="${debian_pkg}"; \
         [ ! -z "${distro_mirror}" ] && sed -i \
         "s/deb.debian.org/${distro_mirror}/g" /etc/apt/sources.list ||:; \
-        curl -fsSL https://download.docker.com/linux/debian/gpg | sudo apt-key add -; \
+        apt update && apt install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common ;\
+        curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -; \
         add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"; \
         apt update; \
-        apt-cache policy docker-ce; fi \
+        apt-cache policy docker-ce; \
+        distribution=$(. /etc/os-release;echo $ID$VERSION_ID); \
+        curl -s -L https://nvidia.github.io/nvidia-docker/gpgkey | apt-key add -; \
+        curl -s -L https://nvidia.github.io/nvidia-docker/$distribution/nvidia-docker.list | tee /etc/apt/sources.list.d/nvidia-docker.list; \
+        apt-get update && apt-get install -y nvidia-container-toolkit; fi \
 
     && eval "${pkg_upgrade_cmd}" \
     && ${pkg_install_cmd} ${distro_pkg} \
@@ -42,7 +48,7 @@ run echo "|--> install basics pre-requisites" \
         ${distro_deps} ||:\
     && echo "|--> install python packages(numpy,pandas,grpc)" \ 
     && [ ! -z "${pypi_mirror}" ] && pip config set global.index-url "${pypi_mirror}" ||:\
-    &&  pip install -u --no-cache-dir -r requirements.txt \
+    &&  pip install -U --no-cache-dir -r requirements.txt \
     && echo "|--> cleaning" \
     && rm -rf /root/.cache \
     && rm -rf /root/.[acpw]* \
@@ -61,6 +67,7 @@ run echo "|--> install basics pre-requisites" \
 
 run mkdir /home/hill
 workdir /home/hill 
+env HOME=/home/hill
 run git clone --recursive https://github.com/hillyu/hill.git dotfiles \
     && bash ~/dotfiles/bin/bootstrap.sh ~/dotfiles
 run sed -i 's/ash/zsh/g' /etc/passwd
