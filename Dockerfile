@@ -1,4 +1,4 @@
-arg base="nvidia/cuda:10.2-runtime" 
+arg base="nvidia/cuda:10.1-runtime" 
 from $base
 # following args can be seen from inside of the build container
 arg distro_mirror
@@ -11,7 +11,7 @@ arg debian_pkg="build-essential vim htop zsh git curl bash tmux wget nvidia-dock
 arg ubuntu_pkg="build-essential vim htop zsh git curl bash tmux wget python3-pip nvidia-container-toolkit nvidia-docker2 docker-ce"
 #arg distro_deps="make automake g++ linux-headers cmake"
 arg distro_deps="make automake g++ linux-headers"
-arg port_to_expose=8080
+arg port_to_expose=5000
 
 
 add requirements.txt requirements.txt
@@ -78,7 +78,7 @@ run sed -i 's/ash/zsh/g' /etc/passwd
     #"--allow-root", "--ip=0.0.0.0", "--notebookapp.token="]
 add ./entrypoint.sh ./
 entrypoint ["/home/hill/entrypoint.sh"]
-CMD ["jupyter", "notebook", "--port=8080", "--no-browser", \
-    "--allow-root", "--ip=0.0.0.0", "--NotebookApp.token="]
+#CMD ["jupyter", "notebook", "--port=5000", "--no-browser", \
+#    "--allow-root", "--ip=0.0.0.0", "--NotebookApp.token="]
 # port
 expose ${port_to_expose}
