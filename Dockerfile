@@ -1,4 +1,4 @@
-arg base="python:3-alpine" 
+arg base="nvidia/cuda:10.2-runtime" 
 from $base
 # following args can be seen from inside of the build container
 arg distro_mirror
@@ -7,7 +7,8 @@ ARG distro_pkg
 #alpine
 ARG alpine_pkg="build-base vim htop zsh git curl bash openssh tmux docker zsh-vcs"  
 #buster
-arg debian_pkg="build-essential vim htop zsh git curl bash tmux nvidia-container-toolkit docker-ce"
+arg debian_pkg="build-essential vim htop zsh git curl bash tmux wget nvidia-docker2 nvidia-container-toolkit docker-ce"
+arg ubuntu_pkg="build-essential vim htop zsh git curl bash tmux wget python3-pip nvidia-container-toolkit nvidia-docker2 docker-ce"
 #arg distro_deps="make automake g++ linux-headers cmake"
 arg distro_deps="make automake g++ linux-headers"
 arg port_to_expose=8080
@@ -28,12 +29,13 @@ run echo "|--> install basics pre-requisites" \
         pkg_install_cmd="apt-get install -y"; \
         pkg_upgrade_cmd="apt-get update"; \
         pkg_clean_cmd="apt-get clean"; \
-        distro_pkg="${debian_pkg}"; \
-        [ ! -z "${distro_mirror}" ] && sed -i \
-        "s/deb.debian.org/${distro_mirror}/g" /etc/apt/sources.list ||:; \
-        apt update && apt install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common ;\
-        curl -fsSL https://download.docker.com/linux/debian/gpg | apt-key add -; \
-        add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/debian $(lsb_release -cs) stable"; \
+        distro_pkg="${ubuntu_pkg}"; \
+        #[ ! -z "${distro_mirror}" ] && sed -i \
+        #"s/deb.debian.org/${distro_mirror}/g" /etc/apt/sources.list ||:; \
+        apt update && apt install -y apt-transport-https ca-certificates curl gnupg2 software-properties-common python3-pip;\
+        update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 1; \
+        curl -fsSL https://download.docker.com/linux/ubuntu/gpg | apt-key add -; \
+        add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"; \
         apt update; \
         apt-cache policy docker-ce; \
         distribution=$(. /etc/os-release;echo $ID$VERSION_ID); \
