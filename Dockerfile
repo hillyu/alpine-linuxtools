@@ -1,7 +1,7 @@
 arg base="nvidia/cuda:10.1-runtime" 
 from $base
 # following args can be seen from inside of the build container
-arg ubuntu_pkg="build-essential vim htop zsh git curl bash tmux wget python3-pip nvidia-container-toolkit nvidia-docker2 docker-ce"
+arg ubuntu_pkg="build-essential vim htop zsh git curl bash tmux wget python3-pip nvidia-container-toolkit nvidia-docker2 docker-ce nfs-common iputils-ping locales"
 arg preq_pkg="apt-transport-https ca-certificates curl gnupg2 software-properties-common"
 
 
@@ -36,6 +36,7 @@ run echo "|--> install basics pre-requisites" && \
     && rm -rf /var/lib/apt/lists \ 
     && find /usr/lib/ -name __pycache__ | xargs rm -rf \
     && ${pkg_clean_cmd} \
+    && locale-gen en_US.UTF-8 \
     && echo "|--> done!" 
 
 run mkdir /home/hill
