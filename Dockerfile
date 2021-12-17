@@ -39,7 +39,8 @@ run echo "|--> install basics pre-requisites" && \
     && locale-gen en_US.UTF-8 \
     && echo "|--> done!" 
 
-run useradd -G sudo -s /bin/zsh -m hill 
+run useradd -u 1000 -G sudo -s /bin/zsh -m hill 
+run chown -R hill:hill /home/hill
 USER hill
 # run mkdir /home/hill
 workdir /home/hill 
