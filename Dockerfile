@@ -1,7 +1,7 @@
 arg base="nvidia/cuda:10.1-runtime" 
 from $base
 # following args can be seen from inside of the build container
-arg ubuntu_pkg="build-essential vim htop zsh git curl bash tmux wget python3-pip nvidia-container-toolkit nvidia-docker2 docker-ce nfs-common iputils-ping locales"
+arg ubuntu_pkg="sudo build-essential vim htop zsh git curl bash tmux wget python3-pip nvidia-container-toolkit nvidia-docker2 docker-ce nfs-common iputils-ping locales"
 arg preq_pkg="apt-transport-https ca-certificates curl gnupg2 software-properties-common"
 
 
