@@ -39,9 +39,11 @@ run echo "|--> install basics pre-requisites" && \
     && locale-gen en_US.UTF-8 \
     && echo "|--> done!" 
 
-run mkdir /home/hill
+run useradd -G sudo -s /bin/zsh -m hill 
+USER hill
+# run mkdir /home/hill
 workdir /home/hill 
-env HOME=/home/hill
+# env HOME=/home/hill
 #run git clone --recursive https://github.com/hillyu/hill.git dotfiles \
 #    && bash ~/dotfiles/bin/bootstrap.sh ~/dotfiles
 #run sed -i 's/ash/zsh/g' /etc/passwd
