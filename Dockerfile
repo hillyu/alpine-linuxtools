@@ -41,7 +41,7 @@ run echo "|--> install basics pre-requisites" && \
 
 run wget https://github.com/docker/compose/releases/download/1.25.5/docker-compose-Linux-x86_64 \
     && mv docker-compose-Linux-x86_64 /usr/bin/docker-compose && chmod +x /usr/bin/docker-compose
-echo "%sudo ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/wheel
+run echo "%sudo ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/wheel
 run useradd -u 1000 -G sudo -s /bin/zsh -m hill 
 run chown -R hill:hill /home/hill
 USER hill
