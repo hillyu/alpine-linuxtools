@@ -1,6 +1,7 @@
 #!/bin/sh
 
 sudo chown -R hill:hill dotfiles
+sudo chown -R hill:hill .*
 rm -rf dotfiles
 git clone --recursive https://github.com/hillyu/hill.git dotfiles \
 && bash ~/dotfiles/bin/bootstrap.sh ~/dotfiles
