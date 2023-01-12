@@ -6,7 +6,8 @@ arg preq_pkg="apt-transport-https ca-certificates curl gnupg2 software-propertie
 
 
 #add requirements.txt requirements.txt
-
+#work around to fix syscall issue regarding to ubuntu > 20.04,docker needs upgrade!
+run chmod 666 /etc/apt/trusted.gpg.d/*.gpg
 # install packages
 run echo "|--> install basics pre-requisites" && \
         pkg_install_cmd="apt-get install -yq"; \
