@@ -1,4 +1,4 @@
-arg base="11.2.2-base-ubuntu20.04" 
+arg base="nvidia/cuda:11.2.2-base-ubuntu20.04" 
 from $base
 # following args can be seen from inside of the build container
 arg ubuntu_pkg="sudo build-essential vim htop zsh git curl bash tmux wget python3-pip nvidia-container-toolkit nvidia-docker2 docker-ce nfs-common iputils-ping locales rsync"
@@ -7,7 +7,7 @@ arg preq_pkg="apt-transport-https ca-certificates curl gnupg2 software-propertie
 
 #add requirements.txt requirements.txt
 #work around to fix syscall issue regarding to ubuntu > 20.04,docker needs upgrade!
-run chmod 666 /etc/apt/trusted.gpg.d/*.gpg
+run chmod a+r /etc/apt/trusted.gpg.d/*.gpg
 # install packages
 run echo "|--> install basics pre-requisites" && \
         pkg_install_cmd="apt-get install -yq"; \
