@@ -1,4 +1,4 @@
-arg base="ubuntu:22.04" 
+arg base="11.2.2-base-ubuntu20.04" 
 from $base
 # following args can be seen from inside of the build container
 arg ubuntu_pkg="sudo build-essential vim htop zsh git curl bash tmux wget python3-pip nvidia-container-toolkit nvidia-docker2 docker-ce nfs-common iputils-ping locales rsync"
