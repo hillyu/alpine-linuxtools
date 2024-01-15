@@ -1,7 +1,7 @@
 arg base="nvidia/cuda:11.2.2-base-ubuntu20.04" 
 from $base
 # following args can be seen from inside of the build container
-arg ubuntu_pkg="sudo build-essential vim htop zsh git curl bash tmux wget python3-pip nvidia-container-toolkit nvidia-docker2 docker-ce nfs-common iputils-ping locales rsync"
+arg ubuntu_pkg="sudo build-essential vim htop zsh git curl bash tmux wget python3-pip nvidia-container-toolkit nvidia-docker2 docker-ce docker-compose nfs-common iputils-ping locales rsync autossh"
 arg preq_pkg="apt-transport-https ca-certificates curl gnupg2 software-properties-common"
 
 
@@ -46,8 +46,6 @@ run echo "|--> install basics pre-requisites" && \
     && locale-gen en_US.UTF-8 \
     && echo "|--> done!" 
 
-run wget https://github.com/docker/compose/releases/download/1.25.5/docker-compose-Linux-x86_64 \
-    && mv docker-compose-Linux-x86_64 /usr/bin/docker-compose && chmod +x /usr/bin/docker-compose
 run echo "%sudo ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 run useradd -u 1000 -G sudo,docker -s /usr/bin/zsh -m hill 
 run chown -R hill:hill /home/hill
@@ -61,6 +59,7 @@ env SHELL=/usr/bin/zsh
 #run sed -i 's/ash/zsh/g' /etc/passwd
 #run wget https://github.com/docker/compose/releases/download/1.25.5/docker-compose-Linux-x86_64 \
 #        && mv docker-compose-Linux-x86_64 /usr/bin/docker-compose && chmod +x /usr/bin/docker-compose
+RUN curl -fsSL https://code-server.dev/install.sh |sh
 
 copy ./entrypoint.sh /usr/bin
 entrypoint ["entrypoint.sh"]
